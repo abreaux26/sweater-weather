@@ -5,7 +5,7 @@ RSpec.describe 'Retrieving weather for a city' do
 
   describe 'happy path' do
     it 'gets current_weather' do
-      # VCR.use_cassette('forecast/location') do
+      VCR.use_cassette('forecast/current_weather') do
         get '/api/v1/forecast?location=denver,co'
 
         expect(response).to be_successful
@@ -14,34 +14,32 @@ RSpec.describe 'Retrieving weather for a city' do
 
         expect(current_weather[:data][:attributes].count).to eq(10)
 
-        current_weather[:data].each do |data|
-          expect(data).to have_key(:id)
-          expect(data).to have_key(:type)
-          expect(data[:attributes]).to have_key(:datetime)
-          expect(data[:attributes]).to have_key(:sunrise)
-          expect(data[:attributes]).to have_key(:sunset)
-          expect(data[:attributes]).to have_key(:temperature)
-          expect(data[:attributes]).to have_key(:feels_like)
-          expect(data[:attributes]).to have_key(:humidity)
-          expect(data[:attributes]).to have_key(:uvi)
-          expect(data[:attributes]).to have_key(:visibility)
-          expect(data[:attributes]).to have_key(:conditions)
-          expect(data[:attributes]).to have_key(:icon)
+        expect(current_weather[:data]).to have_key(:id)
+        expect(current_weather[:data]).to have_key(:type)
+        expect(current_weather[:data][:attributes]).to have_key(:datetime)
+        expect(current_weather[:data][:attributes]).to have_key(:sunrise)
+        expect(current_weather[:data][:attributes]).to have_key(:sunset)
+        expect(current_weather[:data][:attributes]).to have_key(:temperature)
+        expect(current_weather[:data][:attributes]).to have_key(:feels_like)
+        expect(current_weather[:data][:attributes]).to have_key(:humidity)
+        expect(current_weather[:data][:attributes]).to have_key(:uvi)
+        expect(current_weather[:data][:attributes]).to have_key(:visibility)
+        expect(current_weather[:data][:attributes]).to have_key(:conditions)
+        expect(current_weather[:data][:attributes]).to have_key(:icon)
 
-          expect(data[:id].to_i).to be_nil
-          expect(data[:type]).to eq('forecast')
-          expect(data[:attributes][:datetime]).to be_a(String)
-          expect(data[:attributes][:sunrise]).to be_a(String)
-          expect(data[:attributes][:sunset].to_f).to be_a(String)
-          expect(data[:attributes][:temperature]).to be_a(Float)
-          expect(data[:attributes][:feels_like]).to be_a(Float)
-          expect(data[:attributes][:humidity]).to be_a(Float)
-          expect(data[:attributes][:uvi]).to be_a(Float)
-          expect(data[:attributes][:visibility]).to be_a(Float)
-          expect(data[:attributes][:conditions]).to be_a(String)
-          expect(data[:attributes][:icon]).to be_a(String)
-        end
-      # end
+        expect(current_weather[:data][:id]).to be_nil
+        expect(current_weather[:data][:type]).to eq('current_weather')
+        expect(current_weather[:data][:attributes][:datetime]).to be_a(String)
+        expect(current_weather[:data][:attributes][:sunrise]).to be_a(String)
+        expect(current_weather[:data][:attributes][:sunset]).to be_a(String)
+        expect(current_weather[:data][:attributes][:temperature]).to be_a(Float)
+        expect(current_weather[:data][:attributes][:feels_like]).to be_a(Float)
+        expect(current_weather[:data][:attributes][:humidity]).to be_a(Float).or be_a(Integer)
+        expect(current_weather[:data][:attributes][:uvi]).to be_a(Float).or be_a(Integer)
+        expect(current_weather[:data][:attributes][:visibility]).to be_a(Float).or be_a(Integer)
+        expect(current_weather[:data][:attributes][:conditions]).to be_a(String)
+        expect(current_weather[:data][:attributes][:icon]).to be_a(String)
+      end
     end
   end
 
