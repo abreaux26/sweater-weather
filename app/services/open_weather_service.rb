@@ -12,6 +12,6 @@ class OpenWeatherService
 
   def self.current_weather(coordinates)
     data = get_data("/data/2.5/onecall?lat=#{coordinates.lat}&lon=#{coordinates.lng}&units=imperial")
-    CurrentWeather.new(data[:current])
+    data[:current]
   end
 end

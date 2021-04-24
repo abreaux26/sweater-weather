@@ -1,11 +1,8 @@
 require 'rails_helper'
 RSpec.describe 'Retrieving weather for a city' do
-  before :each do
-  end
-
   describe 'happy path' do
     it 'gets current_weather' do
-      VCR.use_cassette('forecast/current_weather') do
+      VCR.use_cassette('forecast/happy_path/current_weather') do
         get '/api/v1/forecast?location=denver,co'
 
         expect(response).to be_successful
@@ -44,5 +41,22 @@ RSpec.describe 'Retrieving weather for a city' do
   end
 
   describe 'sad path' do
+    it 'returns error when no location is passed' do
+      get '/api/v1/forecast?location='
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(406)
+      data = JSON.parse(response.body, symbolize_names: true)
+      expect(data[:error]).to eq('Invalid location.')
+    end
+
+    it 'returns error when no location param' do
+      get '/api/v1/forecast'
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(406)
+      data = JSON.parse(response.body, symbolize_names: true)
+      expect(data[:error]).to eq('Invalid location.')
+    end
   end
 end

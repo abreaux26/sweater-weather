@@ -1,6 +1,7 @@
 class ForecastFacade
   def self.get_forecast(location)
-    OpenWeatherService.current_weather(coordinates(location))
+    current_weather = OpenWeatherService.current_weather(coordinates(location))
+    CurrentWeather.new(current_weather)
   end
 
   def self.coordinates(location)
