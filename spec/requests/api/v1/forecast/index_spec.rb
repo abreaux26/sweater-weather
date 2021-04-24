@@ -1,7 +1,7 @@
 require 'rails_helper'
 RSpec.describe 'Retrieving weather for a city' do
   describe 'happy path' do
-    it 'gets current_weather' do
+    it 'gets forecast' do
       VCR.use_cassette('forecast') do
         get '/api/v1/forecast?location=denver,co'
 

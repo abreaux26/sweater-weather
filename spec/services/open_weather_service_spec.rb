@@ -2,7 +2,7 @@ require 'rails_helper'
 RSpec.describe 'Open Weather Service' do
   describe 'happy path' do
     it '::forecast(coordinates)' do
-      VCR.use_cassette('open_weather_engine/forecast') do
+      VCR.use_cassette('open_weather_service/forecast') do
         coords = Coordinate.new({
             "lat": 39.738453,
             "lng": -104.984853
