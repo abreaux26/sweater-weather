@@ -24,6 +24,12 @@ RSpec.describe 'Retrieving weather for a city' do
         expect(current_weather[:data][:attributes]).to have_key(:conditions)
         expect(current_weather[:data][:attributes]).to have_key(:icon)
 
+        expect(current_weather[:data][:attributes]).not_to have_key(:pressure)
+        expect(current_weather[:data][:attributes]).not_to have_key(:dew_point)
+        expect(current_weather[:data][:attributes]).not_to have_key(:clouds)
+        expect(current_weather[:data][:attributes]).not_to have_key(:wind_speed)
+        expect(current_weather[:data][:attributes]).not_to have_key(:wind_deg)
+
         expect(current_weather[:data][:id]).to be_nil
         expect(current_weather[:data][:type]).to eq('current_weather')
         expect(current_weather[:data][:attributes][:datetime]).to be_a(String)
