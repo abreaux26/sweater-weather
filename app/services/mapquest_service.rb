@@ -12,6 +12,6 @@ class MapquestService
 
   def self.get_coordinates(location)
     data = get_data("/geocoding/v1/address?location=#{location}")
-    Coordinate.new(data[:results].first[:locations].first[:latLng])
+    data[:results].first[:locations].first[:latLng]
   end
 end
