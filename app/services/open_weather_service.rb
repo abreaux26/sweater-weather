@@ -5,13 +5,17 @@ class OpenWeatherService
     end
   end
 
-  def self.get_data(url)
-    response = connection.get(url)
+  def self.get_data(coordinates)
+    response = connection.get("/data/2.5/onecall?lat=#{coordinates.lat}&lon=#{coordinates.lng}&units=imperial")
     JSON.parse(response.body, symbolize_names: true)
   end
 
-  def self.current_weather(coordinates)
-    data = get_data("/data/2.5/onecall?lat=#{coordinates.lat}&lon=#{coordinates.lng}&units=imperial")
-    data[:current]
+  def self.forecast(coordinates)
+    data = get_data(coordinates)
+    {
+      current_weather: data[:current],
+      daily_weather: data[:daily].first(5),
+      hourly_weather: data[:hourly].first(8)
+    }
   end
 end

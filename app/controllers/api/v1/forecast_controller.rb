@@ -3,8 +3,8 @@ class Api::V1::ForecastController < ApplicationController
 
   def index
     return render_error('Invalid location.', :not_acceptable) if invalid_location?
-    current_weather = ForecastFacade.get_forecast(params[:location])
-    render json: CurrentWeatherSerializer.new(current_weather)
+    forecast = ForecastFacade.get_forecast(params[:location])
+    render json: ForecastSerializer.new(forecast)
   end
 
   private

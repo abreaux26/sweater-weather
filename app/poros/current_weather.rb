@@ -1,6 +1,5 @@
 class CurrentWeather
-  attr_reader :id,
-              :datetime,
+  attr_reader :datetime,
               :sunrise,
               :sunset,
               :temperature,
