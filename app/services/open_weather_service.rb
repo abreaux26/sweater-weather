@@ -9,7 +9,7 @@ class OpenWeatherService
   end
 
   def self.current_weather(coordinates)
-    data = get_data("/data/2.5/onecall?lat=#{coordinates.lat}&lon=#{coordinates.lng}&appid=#{ENV['open_weather_map_key']}")
+    data = get_data("/data/2.5/onecall?lat=#{coordinates.lat}&lon=#{coordinates.lng}&units=imperial&appid=#{ENV['open_weather_map_key']}")
     CurrentWeather.new(data[:current])
   end
 end
