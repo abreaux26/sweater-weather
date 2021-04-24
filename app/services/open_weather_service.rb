@@ -6,7 +6,10 @@ class OpenWeatherService
   end
 
   def self.get_data(coordinates)
-    response = connection.get("/data/2.5/onecall?lat=#{coordinates.lat}&lon=#{coordinates.lng}&units=imperial")
+    response = connection.get("/data/2.5/onecall?lat=#{coordinates.lat}&lon=#{coordinates.lng}") do |req|
+      req.params['units'] = 'imperial'
+      req.params['exclude'] = 'minutely'
+    end
     JSON.parse(response.body, symbolize_names: true)
   end
 
