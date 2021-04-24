@@ -5,9 +5,13 @@ class MapquestService
     end
   end
 
+  def self.get_data(url)
+    response = connection.get(url)
+    JSON.parse(response.body, symbolize_names: true)
+  end
+
   def self.get_coordinates(location)
-    response = connection.get("/geocoding/v1/address?location=#{location}")
-    data = JSON.parse(response.body, symbolize_names: true)
+    data = get_data("/geocoding/v1/address?location=#{location}")
     Coordinate.new(data[:results].first[:locations].first[:latLng])
   end
 end
