@@ -7,22 +7,22 @@ RSpec.describe 'Retrieving weather for a city' do
 
         expect(response).to be_successful
 
-        data = JSON.parse(response.body, symbolize_names: true)
+        forecast = JSON.parse(response.body, symbolize_names: true)
 
-        expect(data[:data][:attributes].count).to eq(3)
+        expect(forecast[:data][:attributes].count).to eq(3)
 
-        expect(data[:data]).to have_key(:id)
-        expect(data[:data]).to have_key(:type)
-        expect(data[:data][:attributes]).to have_key(:current_weather)
-        expect(data[:data][:attributes]).to have_key(:daily_weather)
-        expect(data[:data][:attributes]).to have_key(:hourly_weather)
+        expect(forecast[:data]).to have_key(:id)
+        expect(forecast[:data]).to have_key(:type)
+        expect(forecast[:data][:attributes]).to have_key(:current_weather)
+        expect(forecast[:data][:attributes]).to have_key(:daily_weather)
+        expect(forecast[:data][:attributes]).to have_key(:hourly_weather)
 
-        expect(data[:data][:id]).to be_nil
-        expect(data[:data][:type]).to eq('forecast')
-        
-        current_weather_test(data[:data][:attributes][:current_weather])
-        daily_weather_test(data[:data][:attributes][:daily_weather])
-        hourly_weather_test(data[:data][:attributes][:hourly_weather])
+        expect(forecast[:data][:id]).to be_nil
+        expect(forecast[:data][:type]).to eq('forecast')
+
+        current_weather_test(forecast[:data][:attributes][:current_weather])
+        daily_weather_test(forecast[:data][:attributes][:daily_weather])
+        hourly_weather_test(forecast[:data][:attributes][:hourly_weather])
       end
     end
   end
@@ -48,6 +48,8 @@ RSpec.describe 'Retrieving weather for a city' do
   end
 
   def current_weather_test(data)
+    expect(data).to be_a(Hash)
+
     expect(data).to have_key(:datetime)
     expect(data).to have_key(:sunrise)
     expect(data).to have_key(:sunset)
@@ -78,9 +80,12 @@ RSpec.describe 'Retrieving weather for a city' do
   end
 
   def daily_weather_test(daily_data)
+    expect(daily_data).to be_an(Array)
     expect(daily_data.count).to eq(5)
 
     daily_data.each do |data|
+      expect(data).to be_a(Hash)
+
       expect(data).to have_key(:date)
       expect(data).to have_key(:sunrise)
       expect(data).to have_key(:sunset)
@@ -114,9 +119,12 @@ RSpec.describe 'Retrieving weather for a city' do
   end
 
   def hourly_weather_test(hourly_data)
+    expect(hourly_data).to be_an(Array)
     expect(hourly_data.count).to eq(8)
 
     hourly_data.each do |data|
+      expect(data).to be_a(Hash)
+
       expect(data).to have_key(:time)
       expect(data).to have_key(:temperature)
       expect(data).to have_key(:conditions)

@@ -1,26 +1,21 @@
 require 'rails_helper'
 RSpec.describe 'Open Weather Service' do
   describe 'happy path' do
-    it '::current_weather(coordinates)' do
-      VCR.use_cassette('open_weather_engine/current_weather') do
+    it '::forecast(coordinates)' do
+      VCR.use_cassette('open_weather_engine/forecast') do
         coords = Coordinate.new({
             "lat": 39.738453,
             "lng": -104.984853
           })
-        cw = OpenWeatherService.current_weather(coords)
+        forecast = OpenWeatherService.forecast(coords)
 
-        expect(cw).to be_a(Hash)
-        expect(cw).to have_key(:dt)
-        expect(cw).to have_key(:sunrise)
-        expect(cw).to have_key(:sunset)
-        expect(cw).to have_key(:temp)
-        expect(cw).to have_key(:feels_like)
-        expect(cw).to have_key(:humidity)
-        expect(cw).to have_key(:uvi)
-        expect(cw).to have_key(:visibility)
-        expect(cw).to have_key(:weather)
-        expect(cw[:weather].first).to have_key(:description)
-        expect(cw[:weather].first).to have_key(:icon)
+        expect(forecast).to be_a(Hash)
+        expect(forecast).to have_key(:current_weather)
+        expect(forecast).to have_key(:daily_weather)
+        expect(forecast).to have_key(:hourly_weather)
+
+        expect(forecast[:daily_weather].size).to eq(5)
+        expect(forecast[:hourly_weather].size).to eq(8)
       end
     end
   end

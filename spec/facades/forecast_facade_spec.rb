@@ -9,6 +9,7 @@ RSpec.describe ForecastFacade do
         expect(forecast.current_weather).to be_instance_of(CurrentWeather)
         expect(forecast.daily_weather).to be_an(Array)
         expect(forecast.hourly_weather).to be_an(Array)
+
         forecast.daily_weather.each do |daily_weather|
           expect(daily_weather).to be_instance_of(DailyWeather)
         end
