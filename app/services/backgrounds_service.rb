@@ -6,7 +6,7 @@ class BackgroundsService
   end
 
   def self.get_background(location)
-    response = connection.get("/v1/search") do |req|
+    response = connection.get('/v1/search') do |req|
       req.params['query'] = "downtown #{location}"
     end
     data = JSON.parse(response.body, symbolize_names: true)

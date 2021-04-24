@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   end
 
   private
-  
+
   def invalid_location?
     params[:location].blank?
   end
