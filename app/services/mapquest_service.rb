@@ -5,13 +5,11 @@ class MapquestService
     end
   end
 
-  def self.get_data(url)
-    response = connection.get(url)
-    JSON.parse(response.body, symbolize_names: true)
-  end
-
   def self.get_coordinates(location)
-    data = get_data("/geocoding/v1/address?location=#{location}")
+    response = connection.get('/geocoding/v1/address') do |req|
+      req.params['location'] = location
+    end
+    data = JSON.parse(response.body, symbolize_names: true)
     data[:results].first[:locations].first[:latLng]
   end
 end
