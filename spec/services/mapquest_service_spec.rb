@@ -2,7 +2,7 @@ require 'rails_helper'
 RSpec.describe 'Mapquest Service' do
   describe 'happy path' do
     it '::get_coordinates(location)' do
-      VCR.use_cassette('mapquest_engine/coordinates') do
+      VCR.use_cassette('mapquest_service/coordinates') do
         coords = MapquestService.get_coordinates('denver,co')
 
         expect(coords).to be_a(Hash)
