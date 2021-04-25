@@ -34,11 +34,38 @@ RSpec.describe 'Login' do
       expect(login_info[:data][:attributes][:email]).to be_a(String)
       expect(login_info[:data][:attributes][:api_key]).to be_a(String)
 
-      expect(login_info[:data][:attributes][:email]).to eq(@user_info[:email])
-      expect(login_info[:data][:attributes][:api_key]).to eq(@user_info[:api_key])
+      expect(login_info[:data][:attributes][:email]).to eq(@user1 [:email])
+      expect(login_info[:data][:attributes][:api_key]).to eq(@user1[:api_key])
     end
   end
 
   describe 'sad path' do
+    it 'credentials are bad, password' do
+      bad_user_login_info = {
+                          "email": "whatever@example.com",
+                          "password": "password123"
+                        }
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/sessions', headers: headers, params: JSON.generate(bad_user_login_info)
+
+      bad_login_info = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).not_to be_successful
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'credentials are bad, email' do
+      bad_user_login_info = {
+                          "email": "whatever123@example.com",
+                          "password": "password"
+                        }
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/sessions', headers: headers, params: JSON.generate(bad_user_login_info)
+
+      bad_login_info = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).not_to be_successful
+      expect(response).to have_http_status(:not_found)
+    end
   end
 end
