@@ -30,11 +30,59 @@ RSpec.describe 'User Registration' do
 
       expect(new_user[:data][:attributes][:email]).to be_a(String)
       expect(new_user[:data][:attributes][:api_key]).to be_a(String)
-      
+
       expect(new_user[:data][:attributes][:email]).to eq(@user_info[:email])
     end
   end
 
   describe 'sad path' do
+    it 'missing an attribute' do
+      bad_user_info = {
+                     "email": "whatever@example.com",
+                     "password": "password"
+                   }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/users', headers: headers, params: JSON.generate(bad_user_info)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq 400
+    end
+
+    it 'passwords dont match' do
+      bad_user_info = {
+                     "email": "whatever@example.com",
+                     "password": "password",
+                     "password_confirmation": "password123"
+                   }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/users', headers: headers, params: JSON.generate(bad_user_info)
+
+      bad_user = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq 400
+      expect(bad_user[:error]).to eq("Password confirmation doesn't match Password")
+    end
+
+    it 'email is already taken' do
+      bad_user_info = {
+                     "email": "whatever@example.com",
+                     "password": "password",
+                     "password_confirmation": "password"
+                   }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      User.create(@user_info)
+      post '/api/v1/users', headers: headers, params: JSON.generate(bad_user_info)
+
+      bad_user = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq 400
+      expect(bad_user[:error]).to eq 'Email has already been taken'
+    end
   end
 end
