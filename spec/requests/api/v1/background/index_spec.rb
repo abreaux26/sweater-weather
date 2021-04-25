@@ -18,8 +18,6 @@ RSpec.describe 'Background Image' do
         expect(background[:data][:id]).to be_nil
         expect(background[:data][:type]).to eq('image')
 
-        expect(background[:data][:attributes].size).to eq(1)
-
         expect(background[:data][:attributes][:image]).to have_key(:location)
         expect(background[:data][:attributes][:image]).to have_key(:image_url)
         expect(background[:data][:attributes][:image]).to have_key(:credits)

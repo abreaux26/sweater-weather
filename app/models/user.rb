@@ -5,7 +5,7 @@ class User < ApplicationRecord
   validates :password, presence: true
   validates :api_key, uniqueness: true
 
-  before_validation :set_api_key
+  before_save :set_api_key
 
   private
 
