@@ -1,7 +1,7 @@
 class SalariesFacade
   def self.get_salaries(destination, forecast)
-    salary_data = UrbanAreaService.get_data(destination)
-    jobs = get_specific_jobs(salary_data[:salaries])
+    data = UrbanAreaService.get_data(destination)
+    jobs = get_specific_jobs(data[:salaries])
     Salary.new(salary_data(destination, forecast, jobs))
   end
 
