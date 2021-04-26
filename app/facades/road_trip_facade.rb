@@ -1,6 +1,8 @@
 class RoadTripFacade
   def self.get_details(trip_info)
     road_trip = MapquestService.get_directions(trip_info)
+    return RoadTrip.new(route_error(trip_info)) if road_trip[:routeError][:errorCode] > 0
+
     RoadTrip.new(road_trip_data(road_trip))
   end
 
@@ -10,6 +12,15 @@ class RoadTripFacade
       end_city: city(road_trip[:locations].last),
       travel_time: road_trip[:formattedTime],
       weather_at_eta: current_weather(road_trip[:locations].last[:latLng], road_trip[:formattedTime])
+    }
+  end
+
+  def self.route_error(trip_info)
+    {
+      start_city: trip_info[:origin],
+      end_city: trip_info[:destination],
+      travel_time: 'Impossible Route',
+      weather_at_eta: {}
     }
   end
 
