@@ -6,10 +6,10 @@ class RoadTripFacade
 
   def self.road_trip_data(road_trip)
     {
-      start_city: city(road_trip[:route][:locations].first),
-      end_city: city(road_trip[:route][:locations].last),
-      travel_time: road_trip[:route][:formattedTime],
-      weather_eta_at: current_weather(road_trip[:destination_coords], road_trip[:route][:formattedTime])
+      start_city: city(road_trip[:locations].first),
+      end_city: city(road_trip[:locations].last),
+      travel_time: road_trip[:formattedTime],
+      weather_eta_at: current_weather(road_trip[:locations].last[:latLng], road_trip[:formattedTime])
     }
   end
 
@@ -22,7 +22,7 @@ class RoadTripFacade
     x = forecast[:hourly_weather].map do |data|
       HourlyWeather.new(data)
     end
-    binding.pry
+    # binding.pry
   end
 
   # def self.arrival_time(???)

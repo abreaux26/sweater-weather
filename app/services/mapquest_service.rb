@@ -19,13 +19,6 @@ class MapquestService
       req.params['to'] = trip_info[:destination]
     end
     data = JSON.parse(response.body, symbolize_names: true)
-    route_and_coordinates(data[:route], trip_info[:destination])
-  end
-
-  def self.route_and_coordinates(route, destination)
-    {
-      route: route,
-      destination_coords: get_coordinates(destination)
-    }
+    data[:route]
   end
 end
