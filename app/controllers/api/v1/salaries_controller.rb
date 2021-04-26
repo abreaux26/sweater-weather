@@ -6,21 +6,21 @@ class Api::V1::SalariesController < ApplicationController
 
     forecast = ForecastFacade.get_forecast(params[:destination])
 
-    response = Faraday.get("https://api.teleport.org/api/cities/") do |req|
-      req.params['search'] = params[:destination]
-      req.params['embed'] = 'city:search-results/city:item/city:urban_area/ua:scores'
+    salary_response = Faraday.get("https://api.teleport.org/api/urban_areas/slug:#{params[:destination]}/salaries/")
+    salary_data = JSON.parse(salary_response.body, symbolize_names: true)
+
+    job_titles = ['Data Analyst',
+                    'Data Scientist',
+                    'Mobile Developer',
+                    'QA Engineer',
+                    'Software Engineer',
+                    'Systems Administrator',
+                    'Web Developer']
+
+    jobs = salary_data[:salaries].find_all do |job_data|
+      job_titles.include?(job_data[:job][:title])
     end
     binding.pry
-    data = JSON.parse(response.body, symbolize_names: true)
-
-    ua_id = data[:_embedded][:'city:search-results'].first[:_embedded][:'city:item'][:_embedded][:'city:urban_area'][:ua_id]
-
-    salaries = Faraday.get("https://api.teleport.org/api/cities/") do |req|
-      req.params['search'] = params[:destination]
-      req.params['embed'] = 'city:search-results/city:item/city:urban_area/ua:scores'
-    end
-    salary_data = JSON.parse(response.body, symbolize_names: true)
-
     # salary_info = {
     #   destination: params[:destination],
     #   forecast: salary_forecast(forecast),
