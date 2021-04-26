@@ -80,4 +80,5 @@ VCR.configure do |config|
   config.filter_sensitive_data('mapquest_key') { ENV['mapquest_key'] }
   config.filter_sensitive_data('open_weather_map_key') { ENV['open_weather_map_key'] }
   config.default_cassette_options = { re_record_interval: 7.days }
+  config.allow_http_connections_when_no_cassette = true
 end
