@@ -1,4 +1,5 @@
 class Api::V1::SalariesController < ApplicationController
+  include ActionView::Helpers::NumberHelper
   before_action :invalid_destination?
 
   def index
@@ -27,7 +28,7 @@ class Api::V1::SalariesController < ApplicationController
       salaries: salary_info(jobs)
     }
 
-    render json: SalariesSerializer.new(salary_info)
+    render json: SalariesSerializer.new(Salary.new(salary_info))
   end
 
   private
@@ -40,7 +41,11 @@ class Api::V1::SalariesController < ApplicationController
 
   def salary_info(jobs)
     jobs.map do |data|
-      Salary.new(data)
+      {
+        title: data[:job][:title],
+        min: number_to_currency(data[:salary_percentiles][:percentile_25]),
+        max: number_to_currency(data[:salary_percentiles][:percentile_75])
+      }
     end
   end
 end
