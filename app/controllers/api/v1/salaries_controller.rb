@@ -20,24 +20,27 @@ class Api::V1::SalariesController < ApplicationController
     jobs = salary_data[:salaries].find_all do |job_data|
       job_titles.include?(job_data[:job][:title])
     end
-    binding.pry
-    # salary_info = {
-    #   destination: params[:destination],
-    #   forecast: salary_forecast(forecast),
-    #   salaries: salary_info(???)
-    # }
 
-    render json: SalariesSerializer.new()
+    salary_info = {
+      destination: params[:destination],
+      forecast: salary_forecast(forecast.current_weather),
+      salaries: salary_info(jobs)
+    }
+
+    render json: SalariesSerializer.new(salary_info)
   end
 
   private
-  def salary_forecast(forecast)
+  def salary_forecast(current_weather)
     {
-      summary: forecast.conditions,
-      temperature: forecast.temperature
+      summary: current_weather.conditions,
+      temperature: current_weather.temperature
     }
   end
 
-  # def salary_info(???)
-  # end
+  def salary_info(jobs)
+    jobs.map do |data|
+      Salary.new(data)
+    end
+  end
 end
