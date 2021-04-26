@@ -1,7 +1,7 @@
 class RoadTripFacade
   def self.get_details(trip_info)
     road_trip = MapquestService.get_directions(trip_info)
-    return RoadTrip.new(route_error(trip_info)) if road_trip[:routeError][:errorCode] > 0
+    return RoadTrip.new(route_error(trip_info)) if (road_trip[:routeError][:errorCode]).positive?
 
     RoadTrip.new(road_trip_data(road_trip))
   end
@@ -30,7 +30,7 @@ class RoadTripFacade
 
   def self.current_weather(coords, travel_duration)
     forecast = OpenWeatherService.forecast(Coordinate.new(coords))
-    current_time = Time.at(forecast[:current_weather][:dt])
+    current_time = Time.zone.at(forecast[:current_weather][:dt])
 
     arrival_time = arrival_time(travel_duration, current_time)
 
@@ -46,16 +46,16 @@ class RoadTripFacade
     }
   end
 
-  def self.eta_weather(forecast, arrival_time, daily=true)
+  def self.eta_weather(forecast, arrival_time, daily = true)
     forecast.find do |data|
       if daily
-        Time.at(data[:dt]).day == arrival_time.day
+        Time.zone.at(data[:dt]).day == arrival_time.day
       else
-        Time.at(data[:dt]).hour == arrival_time.hour
+        Time.zone.at(data[:dt]).hour == arrival_time.hour
       end
     end
   end
-  
+
   def self.arrival_time(travel_duration, current_time)
     hours, minutes = travel_duration.split(':')
 
@@ -72,6 +72,6 @@ class RoadTripFacade
             current_time.day
           end
 
-    Time.new(current_time.year, current_time.month, day, new_hour % 24, new_minutes % 60)
+    Time.zone.local(current_time.year, current_time.month, day, new_hour % 24, new_minutes % 60)
   end
 end
