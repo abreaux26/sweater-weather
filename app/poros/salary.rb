@@ -1,10 +1,9 @@
 class Salary
-  include ActionView::Helpers::NumberHelper
-  attr_reader :title, :min, :max
+  attr_reader :id, :destination, :forecast, :salaries
 
   def initialize(data)
-    @title = data[:job][:title]
-    @min = number_to_currency(data[:salary_percentiles][:percentile_25])
-    @max = number_to_currency(data[:salary_percentiles][:percentile_75])
+    @destination = data[:destination]
+    @forecast = data[:forecast]
+    @salaries = data[:salaries]
   end
 end
