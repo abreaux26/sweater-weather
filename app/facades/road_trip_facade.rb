@@ -35,9 +35,9 @@ class RoadTripFacade
     arrival_time = arrival_time(travel_duration, current_time)
 
     eta_weather = if current_time.day < arrival_time.day
-                    eta_weather_daily(forecast[:daily_weather], arrival_time)
+                    eta_weather(forecast[:daily_weather], arrival_time)
                   else
-                    eta_weather_hourly(forecast[:hourly_weather], arrival_time)
+                    eta_weather(forecast[:hourly_weather], arrival_time, false)
                   end
 
     {
@@ -46,18 +46,16 @@ class RoadTripFacade
     }
   end
 
-  def self.eta_weather_hourly(forecast, arrival_time, daily)
+  def self.eta_weather(forecast, arrival_time, daily=true)
     forecast.find do |data|
-      Time.at(data[:dt]).hour == arrival_time.hour
+      if daily
+        Time.at(data[:dt]).day == arrival_time.day
+      else
+        Time.at(data[:dt]).hour == arrival_time.hour
+      end
     end
   end
-
-  def self.eta_weather_daily(forecast, arrival_time)
-    forecast.find do |data|
-      Time.at(data[:dt]).day == arrival_time.day
-    end
-  end
-
+  
   def self.arrival_time(travel_duration, current_time)
     hours, minutes = travel_duration.split(':')
 
