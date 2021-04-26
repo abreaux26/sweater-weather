@@ -23,6 +23,7 @@ class SalariesFacade
   end
 
   private
+  
   def self.salary_forecast(current_weather)
     {
       summary: current_weather.conditions,
