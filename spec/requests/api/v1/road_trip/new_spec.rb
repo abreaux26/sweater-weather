@@ -45,6 +45,26 @@ RSpec.describe 'Road Trip' do
         expect(road_trip[:data][:attributes][:weather_at_eta][:conditions]).to be_a(String)
       end
     end
+
+    it 'long road trip' do
+      VCR.use_cassette('long_road_trip') do
+        road_trip_info = {
+                            "origin": "New York, NY",
+                            "destination": "Los Angeles, CA",
+                            "api_key": @user1.api_key
+                          }
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/road_trip', headers: headers, params: JSON.generate(road_trip_info)
+
+        road_trip = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to be_successful
+        expect(response).to have_http_status(:ok)
+
+        expect(road_trip[:data][:attributes].count).to eq(4)
+        expect(road_trip[:data][:attributes][:travel_time].split(':').first).to eq("40")
+      end
+    end
   end
 
   describe 'sad path' do
