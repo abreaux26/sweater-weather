@@ -71,6 +71,35 @@ RSpec.describe 'Road Trip' do
       end
     end
 
-    it 'invalid api key'
+    it 'invalid api key' do
+      VCR.use_cassette('road_trip/invalid_api_key') do
+        road_trip_info = {
+                            "origin": "Denver,CO",
+                            "destination": "Pueblo,CO",
+                            "api_key": '1234'
+                          }
+
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/road_trip', headers: headers, params: JSON.generate(road_trip_info)
+
+        expect(response).not_to be_successful
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    it 'no api key' do
+      VCR.use_cassette('road_trip/no_api_key') do
+        road_trip_info = {
+                            "origin": "Denver,CO",
+                            "destination": "Pueblo,CO"
+                          }
+
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/road_trip', headers: headers, params: JSON.generate(road_trip_info)
+
+        expect(response).not_to be_successful
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 end
