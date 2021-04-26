@@ -35,7 +35,7 @@ class Api::V1::SalariesController < ApplicationController
   def salary_forecast(current_weather)
     {
       summary: current_weather.conditions,
-      temperature: current_weather.temperature
+      temperature: "#{current_weather.temperature.to_i} F"
     }
   end
 
