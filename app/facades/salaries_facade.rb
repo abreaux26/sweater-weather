@@ -1,7 +1,8 @@
 class SalariesFacade
   def self.get_salaries(destination, forecast)
-    salary_response = Faraday.get("https://api.teleport.org/api/urban_areas/slug:#{destination}/salaries/")
-    salary_data = JSON.parse(salary_response.body, symbolize_names: true)
+    # salary_response = Faraday.get("https://api.teleport.org/api/urban_areas/slug:#{destination}/salaries/")
+    # salary_data = JSON.parse(salary_response.body, symbolize_names: true)
+    salary_data = UrbanAreaService.get_data(destination)
 
     job_titles = ['Data Analyst',
                     'Data Scientist',
@@ -11,9 +12,11 @@ class SalariesFacade
                     'Systems Administrator',
                     'Web Developer']
 
-    jobs = salary_data[:salaries].find_all do |job_data|
-      job_titles.include?(job_data[:job][:title])
-    end
+    # jobs = salary_data[:salaries].find_all do |job_data|
+    #   job_titles.include?(job_data[:job][:title])
+    # end
+
+    jobs = get_jobs(salary_data[:salaries], job_titles)
 
     {
       destination: destination,
@@ -23,7 +26,13 @@ class SalariesFacade
   end
 
   private
-  
+
+  def self.get_jobs(all_salaries, job_titles)
+    all_salaries.find_all do |job_data|
+      job_titles.include?(job_data[:job][:title])
+    end
+  end
+
   def self.salary_forecast(current_weather)
     {
       summary: current_weather.conditions,
