@@ -39,13 +39,12 @@ class RoadTripFacade
                   else
                     eta_weather(forecast[:hourly_weather], arrival_time, false)
                   end
-
     current_weather_data(eta_weather)
   end
 
   def self.current_weather_data(weather)
     {
-      temperature: weather[:temp],
+      temperature: weather[:temp].is_a?(Hash) ? weather[:temp][:day] : weather[:temp],
       conditions: weather[:weather].first[:description]
     }
   end
