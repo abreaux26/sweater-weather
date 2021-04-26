@@ -1,25 +1,22 @@
 class SalariesFacade
   def self.get_salaries(destination, forecast)
     salary_data = UrbanAreaService.get_data(destination)
-
-    job_titles = ['Data Analyst',
-                    'Data Scientist',
-                    'Mobile Developer',
-                    'QA Engineer',
-                    'Software Engineer',
-                    'Systems Administrator',
-                    'Web Developer']
-
-    jobs = get_jobs(salary_data[:salaries], job_titles)
+    jobs = get_specific_jobs(salary_data[:salaries])
     salary_data(destination, forecast, jobs)
   end
 
-  private
-
-  def self.get_jobs(all_salaries, job_titles)
-    all_salaries.find_all do |job_data|
+  def self.get_specific_jobs(all_job_salaries)
+    all_job_salaries.find_all do |job_data|
       job_titles.include?(job_data[:job][:title])
     end
+  end
+
+  def self.salary_data(destination, forecast, jobs)
+    {
+      destination: destination,
+      forecast: salary_forecast(forecast.current_weather),
+      salaries: salaries(jobs)
+    }
   end
 
   def self.salary_forecast(current_weather)
@@ -39,11 +36,17 @@ class SalariesFacade
     end
   end
 
-  def self.salary_data(destination, forecast, jobs)
-    {
-      destination: destination,
-      forecast: salary_forecast(forecast.current_weather),
-      salaries: salaries(jobs)
-    }
+  private
+
+  def self.job_titles
+    [
+      'Data Analyst',
+      'Data Scientist',
+      'Mobile Developer',
+      'QA Engineer',
+      'Software Engineer',
+      'Systems Administrator',
+      'Web Developer'
+    ]
   end
 end
