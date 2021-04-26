@@ -5,7 +5,7 @@ class Api::V1::SalariesController < ApplicationController
     return render_error('Invalid destination.') if invalid_destination?
 
     forecast = ForecastFacade.get_forecast(params[:destination])
-    salary_info = SalariesFacade.get_salaries(params[:destination], forecast)
-    render json: SalariesSerializer.new(Salary.new(salary_info))
+    salary_data = SalariesFacade.get_salaries(params[:destination], forecast)
+    render json: SalariesSerializer.new(salary_data)
   end
 end
