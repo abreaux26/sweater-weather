@@ -40,9 +40,13 @@ class RoadTripFacade
                     eta_weather(forecast[:hourly_weather], arrival_time, false)
                   end
 
+    current_weather_data(eta_weather)
+  end
+
+  def self.current_weather_data(weather)
     {
-      temperature: eta_weather[:temp],
-      conditions: eta_weather[:weather].first[:description]
+      temperature: weather[:temp],
+      conditions: weather[:weather].first[:description]
     }
   end
 
@@ -58,20 +62,22 @@ class RoadTripFacade
 
   def self.arrival_time(travel_duration, current_time)
     hours, minutes = travel_duration.split(':')
-
     new_minutes = current_time.min + minutes.to_i
-    new_hour = if new_minutes > 60
-                 (current_time.hour + hours.to_i) + (new_minutes / 60)
-               else
-                 (current_time.hour + hours.to_i)
-               end
-
-    day = if new_hour > 24
-            current_time.day + new_hour / 24
-          else
-            current_time.day
-          end
+    new_hour = get_hour(hours, new_minutes, current_time)
+    day = get_day(new_hour, current_time)
 
     Time.zone.local(current_time.year, current_time.month, day, new_hour % 24, new_minutes % 60)
+  end
+
+  def self.get_hour(hours, minutes, current_time)
+    return (current_time.hour + hours.to_i) + (minutes / 60) if minutes > 60
+
+    (current_time.hour + hours.to_i)
+  end
+
+  def self.get_day(hour, current_time)
+    return current_time.day + hour / 24 if hour > 24
+
+    current_time.day
   end
 end
