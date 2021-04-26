@@ -48,5 +48,29 @@ RSpec.describe 'Road Trip' do
   end
 
   describe 'sad path' do
+    it 'impossible route' do
+      VCR.use_cassette('road_trip/impossible_route') do
+        impossible_route = {
+                            "origin": "New York, NY",
+                            "destination": "London, UK",
+                            "api_key": @user1.api_key
+                          }
+
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/road_trip', headers: headers, params: JSON.generate(impossible_route)
+
+        road_trip = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to be_successful
+        expect(response).to have_http_status(:ok)
+
+        expect(road_trip[:data][:attributes].count).to eq(4)
+
+        expect(road_trip[:data][:attributes][:travel_time]).to eq("Impossible Route")
+        expect(road_trip[:data][:attributes][:weather_at_eta]).to eq({})
+      end
+    end
+
+    it 'invalid api key'
   end
 end
