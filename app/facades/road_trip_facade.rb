@@ -30,12 +30,15 @@ class RoadTripFacade
 
   def self.current_weather(coords, travel_duration)
     forecast = OpenWeatherService.forecast(Coordinate.new(coords))
+    current_time = Time.at(forecast[:current_weather][:dt])
 
-    arrival_time = arrival_time(travel_duration, forecast[:current_weather][:dt])
+    arrival_time = arrival_time(travel_duration, current_time)
 
-    eta_weather = forecast[:hourly_weather].find do |data|
-      Time.at(data[:dt]).hour == arrival_time.hour
-    end
+    eta_weather = if current_time.day < arrival_time.day
+                    eta_weather_daily(forecast[:daily_weather], arrival_time)
+                  else
+                    eta_weather_hourly(forecast[:hourly_weather], arrival_time)
+                  end
 
     {
       temperature: eta_weather[:temp],
@@ -43,9 +46,19 @@ class RoadTripFacade
     }
   end
 
-  def self.arrival_time(travel_duration, current_time)
-    current_time = Time.at(current_time)
+  def self.eta_weather_hourly(forecast, arrival_time, daily)
+    forecast.find do |data|
+      Time.at(data[:dt]).hour == arrival_time.hour
+    end
+  end
 
+  def self.eta_weather_daily(forecast, arrival_time)
+    forecast.find do |data|
+      Time.at(data[:dt]).day == arrival_time.day
+    end
+  end
+
+  def self.arrival_time(travel_duration, current_time)
     hours, minutes = travel_duration.split(':')
 
     new_minutes = current_time.min + minutes.to_i
@@ -55,6 +68,12 @@ class RoadTripFacade
                  (current_time.hour + hours.to_i)
                end
 
-    Time.new(current_time.year, current_time.month, current_time.day, new_hour, new_minutes % 60)
+    day = if new_hour > 24
+            current_time.day + new_hour / 24
+          else
+            current_time.day
+          end
+
+    Time.new(current_time.year, current_time.month, day, new_hour % 24, new_minutes % 60)
   end
 end
