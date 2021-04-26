@@ -19,13 +19,21 @@ class RoadTripFacade
 
   def self.current_weather(coords, travel_time)
     forecast = OpenWeatherService.forecast(Coordinate.new(coords))
-    x = forecast[:hourly_weather].map do |data|
-      HourlyWeather.new(data)
-    end
-    # binding.pry
-  end
+    current_time = Time.at(forecast[:current_weather][:dt])
+    hours, minutes = travel_time.split(':')
+    new_minutes = current_time.min + minutes.to_i
+    new_hour = if new_minutes > 60
+                  (current_time.hour + hours.to_i) + (new_minutes / 60)
+               else
+                  (current_time.hour + hours.to_i)
+                end
 
-  # def self.arrival_time(???)
-  #
-  # end
+    arrival_time = Time.new(current_time.year, current_time.month, current_time.day, new_hour, new_minutes % 60)
+
+    eta_weather = forecast[:hourly_weather].find do |data|
+      Time.at(data[:dt]).hour == arrival_time.hour
+    end
+
+    binding.pry
+  end
 end
