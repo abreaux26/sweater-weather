@@ -22,8 +22,12 @@ RSpec.describe 'Salaries' do
       expect(salary[:data][:id]).to be_nil
       expect(salary[:data][:type]).to eq('salaries')
 
+      expect(salary[:data][:attributes][:destination]).to be_a(String)
       expect(salary[:data][:attributes][:forecast]).to be_a(Hash)
       expect(salary[:data][:attributes][:salaries]).to be_an(Array)
+
+      test_forecast(salary[:data][:attributes][:forecast])
+      test_salaries(salary[:data][:attributes][:salaries])
     end
   end
 
@@ -44,6 +48,27 @@ RSpec.describe 'Salaries' do
       expect(response.status).to eq(400)
       data = JSON.parse(response.body, symbolize_names: true)
       expect(data[:error]).to eq('Invalid destination.')
+    end
+  end
+
+  def test_forecast(forecast)
+    expect(forecast).to have_key(:summary)
+    expect(forecast).to have_key(:temperature)
+
+    expect(forecast[:summary]).to be_a(String)
+    expect(forecast[:temperature]).to be_a(String)
+  end
+
+  def test_salaries(salaries)
+    salaries.each do |data|
+      expect(data).to be_a(Hash)
+      expect(data).to have_key(:title)
+      expect(data).to have_key(:min)
+      expect(data).to have_key(:max)
+
+      expect(data[:title]).to be_a(String)
+      expect(data[:min]).to be_a(String)
+      expect(data[:max]).to be_a(String)
     end
   end
 end
