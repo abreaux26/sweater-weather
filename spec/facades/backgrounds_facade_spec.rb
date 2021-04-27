@@ -13,7 +13,7 @@ RSpec.describe BackgroundsFacade do
 
   describe 'sad paths' do
     it 'no location is passed' do
-      VCR.use_cassette('facade/no_location') do
+      VCR.use_cassette('facade/get_background_no_location') do
         background_image = BackgroundsFacade.get_background('')
 
         expect(background_image).to be_a(String)
