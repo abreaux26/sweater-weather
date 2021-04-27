@@ -118,4 +118,9 @@ RSpec.describe RoadTripFacade do
       end
     end
   end
+
+  describe 'sad paths' do
+    it 'no origin'
+    it 'no destination'
+  end
 end

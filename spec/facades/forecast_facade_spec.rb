@@ -84,4 +84,20 @@ RSpec.describe ForecastFacade do
       end
     end
   end
+
+  describe 'sad paths' do
+    it 'no location' do
+      VCR.use_cassette('facade/sad_path/no_location') do
+        forecast = ForecastFacade.get_forecast('')
+        expect(forecast).to eq('Forecast data unavailable.')
+      end
+    end
+
+    it 'invalid coords' do
+      VCR.use_cassette('facade/sad_path/invalid_coords') do
+        data = ForecastFacade.coordinates('')
+        expect(data).to eq('Invalid coordinates')
+      end
+    end
+  end
 end

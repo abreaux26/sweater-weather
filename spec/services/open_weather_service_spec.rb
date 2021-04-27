@@ -21,5 +21,16 @@ RSpec.describe 'Open Weather Service' do
   end
 
   describe 'sad path' do
+    it 'invalid coords' do
+      VCR.use_cassette('open_weather_service/sad_path/invalid_coords') do
+        coords = Coordinate.new({
+            "lat": 100,
+            "lng": 190
+          })
+
+        forecast = OpenWeatherService.forecast(coords)
+        expect(forecast).to eq('Forecast data unavailable')
+      end
+    end
   end
 end
