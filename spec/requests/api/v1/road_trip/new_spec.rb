@@ -121,5 +121,15 @@ RSpec.describe 'Road Trip' do
         expect(response).to have_http_status(:unauthorized)
       end
     end
+
+    it 'no body passed' do
+      VCR.use_cassette('road_trip/no_body_passed') do
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/road_trip', headers: headers
+
+        expect(response).not_to be_successful
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
   end
 end
