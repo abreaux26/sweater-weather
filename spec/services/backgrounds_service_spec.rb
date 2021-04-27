@@ -14,5 +14,6 @@ RSpec.describe 'Backgrounds Service' do
   end
 
   describe 'sad path' do
+    it 'no location is passed'
   end
 end
