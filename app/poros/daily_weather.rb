@@ -9,8 +9,8 @@ class DailyWeather
 
   def initialize(data)
     @date = Time.zone.at(data[:dt]).strftime('%Y-%m-%d')
-    @sunrise = Time.zone.at(data[:sunrise])
-    @sunset = Time.zone.at(data[:sunset])
+    @sunrise = Time.zone.at(data[:sunrise]).strftime('%Y-%m-%d %H:%M:%S %z')
+    @sunset = Time.zone.at(data[:sunset]).strftime('%Y-%m-%d %H:%M:%S %z')
     @max_temp = data[:temp][:max]
     @min_temp = data[:temp][:min]
     @conditions = data[:weather].first[:description]
