@@ -84,5 +84,13 @@ RSpec.describe 'User Registration' do
       expect(response.status).to eq 400
       expect(bad_user[:error]).to eq 'Email has already been taken'
     end
+
+    it 'no body is passed' do
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/users', headers: headers
+
+      expect(response).not_to be_successful
+      expect(response).to have_http_status(:bad_request)
+    end
   end
 end

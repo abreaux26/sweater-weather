@@ -67,5 +67,13 @@ RSpec.describe 'Login' do
       expect(response).not_to be_successful
       expect(response).to have_http_status(:not_found)
     end
+
+    it 'no body is passed' do
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/sessions', headers: headers
+
+      expect(response).not_to be_successful
+      expect(response).to have_http_status(:bad_request)
+    end
   end
 end
