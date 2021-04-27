@@ -6,6 +6,8 @@ class OpenWeatherService
   end
 
   def self.get_data(coordinates)
+    return "Invalid coordinates" unless coordinates.is_a?(Coordinate)
+
     response = connection.get("/data/2.5/onecall?lat=#{coordinates.lat}&lon=#{coordinates.lng}") do |req|
       req.params['units'] = 'imperial'
       req.params['exclude'] = 'minutely'
@@ -15,6 +17,8 @@ class OpenWeatherService
 
   def self.forecast(coordinates)
     data = get_data(coordinates)
+    return "Forecast data unavailable" if data[:message]
+
     {
       current_weather: data[:current],
       daily_weather: data[:daily].first(5),

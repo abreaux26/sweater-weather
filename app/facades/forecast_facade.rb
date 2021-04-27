@@ -1,5 +1,7 @@
 class ForecastFacade
   def self.get_forecast(location)
+    return "Forecast data unavailable." if location.blank?
+
     forecast = OpenWeatherService.forecast(coordinates(location))
     Forecast.new(forecast_data(forecast))
   end
@@ -30,6 +32,8 @@ class ForecastFacade
 
   def self.coordinates(location)
     coords = MapquestService.get_coordinates(location)
+    return "Invalid coordinates" unless coords
+
     Coordinate.new(coords)
   end
 end

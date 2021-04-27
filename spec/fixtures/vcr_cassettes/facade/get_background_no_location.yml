@@ -1,0 +1,76 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.pexels.com/v1/search
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - Bearer 563492ad6f917000010000015ce4638be3ca48c7ae1138757dcebc91
+      User-Agent:
+      - Faraday v1.4.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Tue, 27 Apr 2021 16:45:03 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '44'
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cf_bm=bdc49c97909afab38ae9939bbc1697468c605384-1619541903-1800-AS/HZjAmK0EnPV34dGRGd+0SnAViycswSxcD1WrRpKVsApIZxh351wtsYPn+ikaaXp86mwjieQFYe0EMlb5j1b4=;
+        path=/; expires=Tue, 27-Apr-21 17:15:03 GMT; domain=.pexels.com; HttpOnly;
+        Secure; SameSite=None
+      - __cf_bm=dbcd03dca2031c6a801feb8e5977f8db694b48ba-1619541903-1800-Aa3rGoYH4mOifiHA8/GVnzJiZr8lS7hNZgRnesGYrmCsvcvVzgWrs85bOdyrj6uRSxhe3EXtPW5EfXRGgGBOeVs=;
+        path=/; expires=Tue, 27-Apr-21 17:15:03 GMT; domain=.pexels.com; HttpOnly;
+        Secure; SameSite=None
+      - __cfduid=dbe50a3994826ce073f9956e162772c9c1619541903; expires=Thu, 27-May-21
+        16:45:03 GMT; path=/; domain=.pexels.com; HttpOnly; SameSite=Lax; Secure
+      - __cfduid=dc8caf2fb4509a8964f06a582370988921619541903; expires=Thu, 27-May-21
+        16:45:03 GMT; path=/; domain=.pexels.com; HttpOnly; SameSite=Lax; Secure
+      Alt-Svc:
+      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400
+      Cache-Control:
+      - no-cache
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '09b5d161ac0000592ba232e000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Vary:
+      - Origin
+      X-Frame-Options:
+      - ALLOWALL
+      X-Ratelimit-Limit:
+      - '20000'
+      X-Ratelimit-Remaining:
+      - '19981'
+      X-Ratelimit-Reset:
+      - '1621810738'
+      X-Request-Id:
+      - d735fc5a-a11c-48c9-889e-3e27d0d12eb3
+      X-Runtime:
+      - '0.023101'
+      X-Server:
+      - master
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 646984e2a9f8592b-DFW
+    body:
+      encoding: UTF-8
+      string: '{"status":400,"code":"No query param given"}'
+  recorded_at: Tue, 27 Apr 2021 16:45:03 GMT
+recorded_with: VCR 6.0.0

@@ -36,5 +36,53 @@ RSpec.describe 'Mapquest Service' do
   end
 
   describe 'sad path' do
+    it 'no origin' do
+      VCR.use_cassette('mapquest_service/sad_path/no_origin') do
+        user1 = User.create( email: "whatever@example.com",
+                              password: "password",
+                              password_confirmation: "password"
+                            )
+        road_trip_info = {
+                            "destination": "Pueblo,CO",
+                            "api_key": user1.api_key
+                          }
+
+        directions = MapquestService.get_directions(road_trip_info)
+        expect(directions).to eq("Invalid route")
+      end
+    end
+
+    it 'no destination' do
+      VCR.use_cassette('mapquest_service/sad_path/no_destination') do
+        user1 = User.create( email: "whatever@example.com",
+                              password: "password",
+                              password_confirmation: "password"
+                            )
+        road_trip_info = {
+                            "origin": "Pueblo,CO",
+                            "api_key": user1.api_key
+                          }
+
+        directions = MapquestService.get_directions(road_trip_info)
+        expect(directions).to eq("Invalid route")
+      end
+    end
+
+    it 'impossible route' do
+      VCR.use_cassette('mapquest_service/sad_path/impossible_route') do
+        user1 = User.create( email: "whatever@example.com",
+                              password: "password",
+                              password_confirmation: "password"
+                            )
+        road_trip_info = {
+                            "origin": "New York, NY",
+                            "destination": " London, UK",
+                            "api_key": user1.api_key
+                          }
+
+        directions = MapquestService.get_directions(road_trip_info)
+        expect(directions).to eq("Invalid route")
+      end
+    end
   end
 end

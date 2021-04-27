@@ -118,4 +118,28 @@ RSpec.describe RoadTripFacade do
       end
     end
   end
+
+  describe 'sad paths' do
+    it 'no origin' do
+      VCR.use_cassette('facade/sad_path/no_origin_road_trip') do
+        trip_info = {
+                      "destination": "London, UK",
+                      "api_key": @user1.api_key
+                    }
+        road_trip = RoadTripFacade.get_details(trip_info)
+        expect(road_trip.travel_time).to eq("Impossible Route")
+      end
+    end
+
+    it 'no destination' do
+      VCR.use_cassette('facade/sad_path/no_destination_road_trip') do
+        trip_info = {
+                      "origin": "London, UK",
+                      "api_key": @user1.api_key
+                    }
+        road_trip = RoadTripFacade.get_details(trip_info)
+        expect(road_trip.travel_time).to eq("Impossible Route")
+      end
+    end
+  end
 end

@@ -1,7 +1,7 @@
 class RoadTripFacade
   def self.get_details(trip_info)
     road_trip = MapquestService.get_directions(trip_info)
-    return RoadTrip.new(route_error(trip_info)) if (road_trip[:routeError][:errorCode]).positive?
+    return RoadTrip.new(route_error(trip_info)) if road_trip.is_a?(String)
 
     RoadTrip.new(road_trip_data(road_trip))
   end

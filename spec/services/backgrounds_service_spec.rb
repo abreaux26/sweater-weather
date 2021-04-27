@@ -14,5 +14,11 @@ RSpec.describe 'Backgrounds Service' do
   end
 
   describe 'sad path' do
+    it 'no query param' do
+      VCR.use_cassette('background_service/no_location') do
+        background = BackgroundsService.get_background('')
+        expect(background).to be_nil
+      end
+    end
   end
 end

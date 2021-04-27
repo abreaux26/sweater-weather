@@ -118,7 +118,45 @@ RSpec.describe 'Road Trip' do
         post '/api/v1/road_trip', headers: headers, params: JSON.generate(road_trip_info)
 
         expect(response).not_to be_successful
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    it 'no body passed' do
+      VCR.use_cassette('road_trip/no_body_passed') do
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/road_trip', headers: headers
+
+        expect(response).not_to be_successful
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    it 'no origin passed' do
+      road_trip_info = {
+                          "destination": "Pueblo,CO",
+                          "api_key": @user1.api_key
+                        }
+      VCR.use_cassette('road_trip/no_origin') do
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/road_trip', headers: headers, params: JSON.generate(road_trip_info)
+
+        expect(response).not_to be_successful
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    it 'no destination passed' do
+      road_trip_info = {
+                          "origin": "Pueblo,CO",
+                          "api_key": @user1.api_key
+                        }
+      VCR.use_cassette('road_trip/destination') do
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/road_trip', headers: headers, params: JSON.generate(road_trip_info)
+
+        expect(response).not_to be_successful
+        expect(response).to have_http_status(:bad_request)
       end
     end
   end
