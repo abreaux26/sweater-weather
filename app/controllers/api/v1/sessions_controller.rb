@@ -1,6 +1,6 @@
 class Api::V1::SessionsController < ApplicationController
   before_action :validate_params
-  
+
   def create
     user_info = JSON.parse(request.raw_post, symbolize_names: true)
     user = User.find_by(email: user_info[:email])
@@ -16,6 +16,6 @@ class Api::V1::SessionsController < ApplicationController
   def validate_params
     return unless request[:email].blank? || request[:password].blank?
 
-    render_error('Missing data. Try again.', :bad_request)
+    render_error('Missing email or password. Try again.', :bad_request)
   end
 end

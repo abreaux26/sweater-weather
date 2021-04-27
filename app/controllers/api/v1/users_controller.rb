@@ -19,6 +19,6 @@ class Api::V1::UsersController < ApplicationController
   def validate_params
     return unless request[:email].blank? || request[:password].blank? || request[:password_confirmation].blank?
 
-    render_error('Missing data. Try again.', :bad_request)
+    render_error('Missing email, password, or password_confirmation. Try again.', :bad_request)
   end
 end
