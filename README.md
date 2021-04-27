@@ -1,23 +1,15 @@
 # Sweater Weather
 
-One Paragraph of project description goes here
-
-This initially appeared on
-[gist](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2), but as
-I can no longer open that page as there are too many comments, I have
-moved it here.
+This is the backend engine fueling an application to plan road trips. This app will allow users to see the curren weather as well as the forecasted weather at the destination. 
 
 ## Summary
 
   - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installing](#installing)
+  - [Endpoints](#endpoints)  
   - [Runing the tests](#running-the-tests)
-  - [Deployment](#deployment)
-  - [Built With](#built-with)
-  - [Contributing](#contributing)
-  - [Versioning](#versioning)
   - [Authors](#authors)
-  - [License](#license)
-  - [Acknowledgments](#acknowledgments)
 
 ## Getting Started
 
@@ -27,81 +19,62 @@ for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+* __Ruby__
 
-    Give examples
+  - The project is built with rubyonrails using __ruby version 2.5.3p105__, you must install ruby on your local machine first. Please visit the [ruby](https://www.ruby-lang.org/en/documentation/installation/) home page to get set up. _Please ensure you install the version of ruby noted above._
+
+* __Rails__
+  ```sh
+  gem install rails --version 5.2.5
+  ```
+
+* __Postgres database__
+  - Visit the [postgresapp](https://postgresapp.com/downloads.html) homepage and follow their instructions to download the latest version of Postgres app.
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development
-env running
+1. Clone the repo
+  ```
+  $ git clone git@github.com:abreaux26/sweater-weather.git
+  ```
 
-Say what the step will be
+2. Bundle Install
+  ```
+  $ bundle install
+  ```
 
-    Give the example
+3. Create, migrate and seed rails database
+  ```
+  $ rails db:{create,migrate}
+  ```
 
-And repeat
-
-    until finished
-
-End with an example of getting some data out of the system or using it
-for a little demo
+4. Set up Environment Variables:
+  - run `bundle exec figaro install`
+  - add the below variable to the `config/application.yml` if you wish to use the existing email microservice. Otherwise you replace it the value with service if desired.
+  ```
+    mapquest_key: <your mapquest api>
+    open_weather_map_key: <your open weather api>
+    pexels_key: <your pexels api>
+  ```
+## Endpoints
+| HTTP verbs | Paths  | Used for |
+| ---------- | ------ | --------:|
+| GET | /api/v1/forecast?location=denver,co | Retrieve weather for a city |
+| GET | /api/v1/backgrounds?location=denver,co | Background Image for the City |
+| POST | /api/v1/users | Creates a new user |
+| POST | /api/v1/sessions | Creates a new session after logging in |
+| POST | /api/v1/road_trip | Creates a new road trip |
 
 ## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-    Give an example
-
-### And coding style tests
-
-Explain what these tests test and why
-
-    Give an example
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-  - [Contributor Covenant](https://www.contributor-covenant.org/) - Used
-    for the Code of Conduct
-  - [Creative Commons](https://creativecommons.org/) - Used to choose
-    the license
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code
-of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions
-available, see the [tags on this
-repository](https://github.com/PurpleBooth/a-good-readme-template/tags).
+- To run the full test suite run the below in your terminal:
+```
+$ bundle exec rspec
+```
+- To run an individual test file run the below in tour terminal:
+```
+$ bundle exec rspec <file path>
+```
+for example: `bundle exec rspec spec/requests/api/v1/forecast/index_spec.rb`
 
 ## Authors
-
-  - **Billie Thompson** - *Provided README Template* -
-    [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of
-[contributors](https://github.com/PurpleBooth/a-good-readme-template/contributors)
-who participated in this project.
-
-## License
-
-This project is licensed under the [CC0 1.0 Universal](LICENSE.md)
-Creative Commons License - see the [LICENSE.md](LICENSE.md) file for
-details
-
-## Acknowledgments
-
-  - Hat tip to anyone whose code was used
-  - Inspiration
-  - etc
+  - **Angel Breaux**
