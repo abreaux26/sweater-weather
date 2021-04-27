@@ -48,8 +48,6 @@ RSpec.describe 'Login' do
       headers = {"CONTENT_TYPE" => "application/json"}
       post '/api/v1/sessions', headers: headers, params: JSON.generate(bad_user_login_info)
 
-      bad_login_info = JSON.parse(response.body, symbolize_names: true)
-
       expect(response).not_to be_successful
       expect(response).to have_http_status(:not_found)
     end
@@ -62,13 +60,34 @@ RSpec.describe 'Login' do
       headers = {"CONTENT_TYPE" => "application/json"}
       post '/api/v1/sessions', headers: headers, params: JSON.generate(bad_user_login_info)
 
-      bad_login_info = JSON.parse(response.body, symbolize_names: true)
-
       expect(response).not_to be_successful
       expect(response).to have_http_status(:not_found)
     end
 
     it 'no body is passed' do
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/sessions', headers: headers
+
+      expect(response).not_to be_successful
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it 'missing email' do
+      bad_user_login_info = {
+                          "password": "password"
+                        }
+                        
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/sessions', headers: headers
+
+      expect(response).not_to be_successful
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it 'missing password' do
+      bad_user_login_info = {
+                          "email": "whatever@example.com"
+                        }
       headers = {"CONTENT_TYPE" => "application/json"}
       post '/api/v1/sessions', headers: headers
 
