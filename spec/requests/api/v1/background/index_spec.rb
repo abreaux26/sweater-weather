@@ -55,5 +55,14 @@ RSpec.describe 'Background Image' do
       data = JSON.parse(response.body, symbolize_names: true)
       expect(data[:error]).to eq('Invalid location.')
     end
+
+    it 'returns error when number is passed' do
+      get '/api/v1/backgrounds?location=123'
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(406)
+      data = JSON.parse(response.body, symbolize_names: true)
+      expect(data[:error]).to eq('Invalid location.')
+    end
   end
 end

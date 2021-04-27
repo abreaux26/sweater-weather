@@ -45,6 +45,15 @@ RSpec.describe 'Retrieving weather for a city' do
       data = JSON.parse(response.body, symbolize_names: true)
       expect(data[:error]).to eq('Invalid location.')
     end
+
+    it 'returns error when number is passed' do
+      get '/api/v1/forecast?location=123'
+      
+      expect(response).not_to be_successful
+      expect(response.status).to eq(406)
+      data = JSON.parse(response.body, symbolize_names: true)
+      expect(data[:error]).to eq('Invalid location.')
+    end
   end
 
   def current_weather_test(data)
