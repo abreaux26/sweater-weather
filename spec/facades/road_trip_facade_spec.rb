@@ -96,5 +96,26 @@ RSpec.describe RoadTripFacade do
         expect(arrival_time).to eq(DateTime.new(2021, 04, 27, 01))
       end
     end
+
+    it '::get_hour' do
+      VCR.use_cassette('facade/get_hour') do
+        hours = 9
+        minutes = 0
+        current_time = DateTime.new(2021, 04, 26, 16)
+        hour = RoadTripFacade.get_hour(hours, minutes, current_time)
+
+        expect(hour).to eq(25)
+      end
+    end
+
+    it '::get_day' do
+      VCR.use_cassette('facade/get_day') do
+        hour = 25
+        current_time = DateTime.new(2021, 04, 26, 16)
+        hour = RoadTripFacade.get_day(hour, current_time)
+
+        expect(hour).to eq(27)
+      end
+    end
   end
 end
