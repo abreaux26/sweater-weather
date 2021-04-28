@@ -4,10 +4,10 @@ class Api::V1::RoadTripController < ApplicationController
   def create
     road_trip_info = JSON.parse(request.raw_post, symbolize_names: true)
     user = User.find_by(api_key: road_trip_info[:api_key])
-    road_trip_details = RoadTripFacade.get_details(road_trip_info)
-    return render json: RoadtripSerializer.new(road_trip_details) if user
+    return render_error('Unauthorized. Try again.', :unauthorized) if user.nil?
 
-    render_error('Unauthorized. Try again.', :unauthorized)
+    road_trip_details = RoadTripFacade.get_details(road_trip_info)
+    render json: RoadtripSerializer.new(road_trip_details)
   end
 
   private
