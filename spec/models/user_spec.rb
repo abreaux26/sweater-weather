@@ -21,4 +21,33 @@ RSpec.describe User do
       expect(user.api_key).not_to be_nil
     end
   end
+
+  describe 'sad path' do
+    it 'no email' do
+      bad_user_info = {
+                     password: "password",
+                     password_confirmation: "password"
+                   }
+      user = User.create(bad_user_info)
+      expect(user.api_key).to be_nil
+    end
+
+    it 'no password' do
+      bad_user_info = {
+                        email: "whatever@example.com",
+                        password_confirmation: "password"
+                      }
+      user = User.create(bad_user_info)
+      expect(user.api_key).to be_nil
+    end
+
+    it 'no password_confirmation' do
+      bad_user_info = {
+                        email: "whatever@example.com",
+                        password: "password"
+                      }
+      user = User.create(bad_user_info)
+      expect(user.api_key).to be_nil
+    end
+  end
 end
