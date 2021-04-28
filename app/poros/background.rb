@@ -1,5 +1,7 @@
 class Background
-  attr_reader :location, :image_url, :credits
+  attr_reader :location,
+              :image_url,
+              :credits
 
   def initialize(location, data)
     @location = "downtown #{location}"
