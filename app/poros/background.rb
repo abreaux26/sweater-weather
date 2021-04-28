@@ -1,13 +1,15 @@
 class Background
-  attr_reader :location, :image_url
+  attr_reader :location,
+              :image_url,
+              :credits
 
   def initialize(location, data)
     @location = "downtown #{location}"
     @image_url = data[:url]
-    @credits = credits(data)
+    @credits = get_credits(data)
   end
 
-  def credits(data)
+  def get_credits(data)
     {
       source: 'https://www.pexels.com',
       photographer: "Photo by #{data[:photographer]} on Pexels",

@@ -1,5 +1,6 @@
 class Image
-  attr_reader :id, :image
+  attr_reader :id,
+              :image
 
   def initialize(data)
     @image = data

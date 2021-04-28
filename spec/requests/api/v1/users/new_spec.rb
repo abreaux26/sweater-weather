@@ -36,9 +36,9 @@ RSpec.describe 'User Registration' do
   end
 
   describe 'sad path' do
-    it 'missing an attribute' do
+    it 'missing an attribute, password confirmation' do
       bad_user_info = {
-                     "email": "whatever@example.com",
+                     "email": "whatever2@example.com",
                      "password": "password"
                    }
 
@@ -49,9 +49,35 @@ RSpec.describe 'User Registration' do
       expect(response.status).to eq 400
     end
 
+    it 'missing an attribute, email' do
+      bad_user_info = {
+                        "password": "password",
+                        "password_confirmation": "password"
+                      }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/users', headers: headers, params: JSON.generate(bad_user_info)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq 400
+    end
+
+    it 'missing an attribute, password' do
+      bad_user_info = {
+                        "email": "whatever1@example.com",
+                        "password_confirmation": "password"
+                      }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/users', headers: headers, params: JSON.generate(bad_user_info)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq 400
+    end
+
     it 'passwords dont match' do
       bad_user_info = {
-                     "email": "whatever@example.com",
+                     "email": "whatever123@example.com",
                      "password": "password",
                      "password_confirmation": "password123"
                    }
@@ -83,6 +109,65 @@ RSpec.describe 'User Registration' do
       expect(response).not_to be_successful
       expect(response.status).to eq 400
       expect(bad_user[:error]).to eq 'Email has already been taken'
+    end
+
+    it 'no body is passed' do
+      headers = {"CONTENT_TYPE" => "application/json"}
+      post '/api/v1/users', headers: headers
+
+      expect(response).not_to be_successful
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it 'email is an empty string' do
+      bad_user_info = {
+                     "email": "",
+                     "password": "password",
+                     "password_confirmation": "password"
+                   }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post '/api/v1/users', headers: headers, params: JSON.generate(bad_user_info)
+
+      bad_user = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq 400
+    end
+
+    it 'password is an empty string' do
+      bad_user_info = {
+                     "email": "whatever@example.com",
+                     "password": "",
+                     "password_confirmation": "password"
+                   }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post '/api/v1/users', headers: headers, params: JSON.generate(bad_user_info)
+
+      bad_user = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq 400
+    end
+
+    it 'password confirmation is an empty string' do
+      bad_user_info = {
+                     "email": "whatever@example.com",
+                     "password": "password",
+                     "password_confirmation": ""
+                   }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post '/api/v1/users', headers: headers, params: JSON.generate(bad_user_info)
+
+      bad_user = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq 400
     end
   end
 end

@@ -30,7 +30,7 @@ class RoadTripFacade
 
   def self.current_weather(coords, travel_duration)
     forecast = OpenWeatherService.forecast(Coordinate.new(coords))
-    current_time = Time.zone.at(forecast[:current_weather][:dt])
+    current_time = Time.at(forecast[:current_weather][:dt])
 
     arrival_time = arrival_time(travel_duration, current_time)
 
@@ -52,9 +52,9 @@ class RoadTripFacade
   def self.eta_weather(forecast, arrival_time, daily = true)
     forecast.find do |data|
       if daily
-        Time.zone.at(data[:dt]).day == arrival_time.day
+        Time.at(data[:dt]).day == arrival_time.day
       else
-        Time.zone.at(data[:dt]).hour == arrival_time.hour
+        Time.at(data[:dt]).hour == arrival_time.hour
       end
     end
   end
